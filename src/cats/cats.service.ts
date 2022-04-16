@@ -6,25 +6,28 @@ import { Cat } from './entities/cat.entity';
 
 @Injectable()
 export class CatsService {
+  private readonly cats: Cat[] = [];
+
   create(createCatDto: CreateCatDto): string {
     console.log({ createCatDto });
-    return 'This action adds a new cat';
+    this.cats.push(createCatDto);
+    return createCatDto?.name;
   }
 
-  findAll(): string {
-    return 'This action returns all cats';
+  findAll(): Cat[] {
+    return this.cats;
   }
 
   async findAllAsync(): Promise<Cat[]> {
     return [
-      { name: 'cat-1' },
+      { name: 'cat-1', age: 1, breed: 'cat' },
     ] as Cat[];
   }
 
   findAllObservable(): Observable<Cat[]> {
-    const cats1 = [{ name: 'cat-1' }];
-    const cats23 = [{ name: 'cat-2' }, { name: 'cat-3' }];
-    const cats4 = [{ name: 'cat-4' }];
+    const cats1 = [{ name: 'cat-1', age: 1, breed: 'cat' }];
+    const cats23 = [{ name: 'cat-2', age: 2, breed: 'cat' }, { name: 'cat-3', age: 1, breed: 'dog' }];
+    const cats4 = [{ name: 'cat-4', age: 4, breed: 'cat' }];
 
     const output = new Observable<Cat[]>(
       (subscriber) => {

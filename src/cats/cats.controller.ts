@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { UpdateCatDto } from './dto/update-cat.dto';
-import { Cat } from './entities/cat.entity';
+import { Cat } from './interfaces/cat.interface';
 
 interface FindOneV2 {
   id: number;
@@ -36,7 +36,7 @@ export class CatsController {
   async findAll(
       @Res({ passthrough: true }) response: Response,
       @Req() request: Request,
-  ): Promise<string> {
+  ): Promise<Cat[]> {
     console.log({ request });
     response.status(HttpStatus.OK);
     return this.catsService.findAll();
