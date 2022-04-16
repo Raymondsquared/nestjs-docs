@@ -1,10 +1,13 @@
 import {
   Body, Controller, Delete, Get, Header,
+  // HttpException,
   // HttpCode,
-  HttpStatus, Param, Patch, Post, Query, Redirect, Req, Res,
+  HttpStatus, Param, Patch, Post, Query, Redirect, Req, Res, UseFilters,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { Observable } from 'rxjs';
+import { HttpExceptionFilter } from '../filters/http-exception.filter';
+import { CustomForbiddenException } from '../exceptions/forbidden.exception';
 import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { UpdateCatDto } from './dto/update-cat.dto';
@@ -15,6 +18,7 @@ interface FindOneV2 {
 }
 
 @Controller('cats')
+// @UseFilters(HttpExceptionFilter)
 export class CatsController {
   private readonly catsService: CatsService;
 
@@ -50,6 +54,19 @@ export class CatsController {
   @Get('observable')
   findAllObserveable(): Observable<Cat[]> {
     return this.catsService.findAllObservable();
+  }
+
+  @Get('exception-filters')
+  // @UseFilters(new HttpExceptionFilter())
+  // you may pass the class (instead of an instance),
+  // leaving responsibility for instantiation to the framework, and enabling dependency injection.
+  @UseFilters(HttpExceptionFilter)
+  async findAllExceptionFilters(): Promise<Cat[]> {
+    // throw new HttpException({
+    //   status: HttpStatus.FORBIDDEN,
+    //   error: 'This is a custom message',
+    // }, HttpStatus.FORBIDDEN);
+    throw new CustomForbiddenException();
   }
 
   // localhost:3000/cats/docs?version=5
