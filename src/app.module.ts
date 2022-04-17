@@ -1,7 +1,7 @@
 import {
   MiddlewareConsumer, Module, NestModule, RequestMethod,
 } from '@nestjs/common';
-// import { APP_FILTER } from '@nestjs/core';
+// import { APP_FILTER, APP_PIPE } from '@nestjs/core';
 import helmet from 'helmet';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -11,6 +11,7 @@ import { AccountModule } from './account/account.module';
 import { logger, LoggerMiddleware } from './middleware/logger.middleware';
 import { CatsController } from './cats/cats.controller';
 import { AccountController } from './account/account.controller';
+// import { ValidationPipe } from './pipes/validation.pipe';
 // import { HttpExceptionFilter } from './filters/http-exception.filter';
 
 @Module({
@@ -21,6 +22,10 @@ import { AccountController } from './account/account.controller';
     // {
     //   provide: APP_FILTER,
     //   useClass: HttpExceptionFilter,
+    // },
+    // {
+    //   provide: APP_PIPE,
+    //   useClass: ValidationPipe,
     // },
   ],
 })

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { CreateCatDto } from './dto/create-cat.dto';
+import { ReadAllCatsDto } from './dto/read-all-cats.dto';
 import { UpdateCatDto } from './dto/update-cat.dto';
 import { Cat } from './entities/cat.entity';
 
@@ -14,7 +15,8 @@ export class CatsService {
     return createCatDto?.name;
   }
 
-  findAll(): Cat[] {
+  findAll(readAllCatsDto?: ReadAllCatsDto): Cat[] {
+    console.log({ readAllCatsDto });
     return this.cats;
   }
 
