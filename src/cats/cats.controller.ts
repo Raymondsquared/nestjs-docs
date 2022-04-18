@@ -4,6 +4,7 @@ import {
   // HttpCode,
   HttpStatus, Param, ParseBoolPipe, ParseIntPipe, ParseUUIDPipe,
   Patch, Post, Query, Redirect, Req, Res, UseFilters, UseGuards,
+  UseInterceptors,
   // UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -18,6 +19,7 @@ import { UpdateCatDto } from './dto/update-cat.dto';
 import { Cat } from './interfaces/cat.interface';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
+import { LoggingInterceptor } from '../interceptors/logging.interceptor';
 // import { createCatSchema } from './cats.schema';
 
 interface FindOneV2 {
@@ -28,6 +30,10 @@ interface FindOneV2 {
 @UseGuards(RolesGuard)
 // As with pipes and exception filters, we can also pass an in-place instance
 // @UseGuards(new RolesGuard())
+// Responsibility for instantiation to the framework and enabling dependency injection.
+@UseInterceptors(LoggingInterceptor)
+// As with pipes, guards, and exception filters, we can also pass an in-place instance:
+// @UseInterceptors(new LoggingInterceptor())
 @Controller('cats')
 // @UseFilters(HttpExceptionFilter)
 export class CatsController {
