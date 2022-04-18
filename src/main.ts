@@ -1,6 +1,8 @@
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './filters/all-exceptions.filter';
+// import { RolesGuard } from './guards/roles.guard';
+// import { RolesGuard } from './guards/roles.guard';
 // import { HttpExceptionFilter } from './filters/http-exception.filter';
 import { logger } from './middleware/logger.middleware';
 // import { ValidationPipe } from './pipes/validation.pipe';
@@ -14,6 +16,8 @@ async function bootstrap() {
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
 
   // app.useGlobalPipes(new ValidationPipe());
+
+  // app.useGlobalGuards(new RolesGuard());
 
   await app.listen(3000);
 }

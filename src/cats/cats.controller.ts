@@ -3,7 +3,7 @@ import {
   // HttpException,
   // HttpCode,
   HttpStatus, Param, ParseBoolPipe, ParseIntPipe, ParseUUIDPipe,
-  Patch, Post, Query, Redirect, Req, Res, UseFilters,
+  Patch, Post, Query, Redirect, Req, Res, UseFilters, UseGuards,
   // UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -16,12 +16,18 @@ import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { UpdateCatDto } from './dto/update-cat.dto';
 import { Cat } from './interfaces/cat.interface';
+import { RolesGuard } from '../guards/roles.guard';
+import { Roles } from '../decorators/roles.decorator';
 // import { createCatSchema } from './cats.schema';
 
 interface FindOneV2 {
   id: number;
 }
 
+// leaving responsibility for instantiation to the framework and enabling dependency injection.
+@UseGuards(RolesGuard)
+// As with pipes and exception filters, we can also pass an in-place instance
+// @UseGuards(new RolesGuard())
 @Controller('cats')
 // @UseFilters(HttpExceptionFilter)
 export class CatsController {
@@ -46,7 +52,7 @@ export class CatsController {
 
   // http://localhost:3000/cats/ab_cd
   @Get('ab*cd')
-  @Get()
+  // @Get()
   async findAll(
     @Res({ passthrough: true }) response: Response,
     @Req() request: Request,
@@ -63,6 +69,18 @@ export class CatsController {
     @Query('page', new DefaultValuePipe(0), ParseIntPipe) page: number,
   ) {
     return this.catsService.findAll({ activeOnly, page });
+  }
+
+  // http://localhost:3000/cats/find-all-v3
+  @Get('find-all-v3')
+  @Roles('admin')
+  async findAllV3(
+    @Res({ passthrough: true }) response: Response,
+    @Req() request: Request,
+  ): Promise<Cat[]> {
+    console.log({ request });
+    response.status(HttpStatus.OK);
+    return this.catsService.findAll();
   }
 
   @Get('async')
