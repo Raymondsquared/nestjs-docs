@@ -20,6 +20,8 @@ import { Cat } from './interfaces/cat.interface';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
 import { LoggingInterceptor } from '../interceptors/logging.interceptor';
+import { User } from '../decorators/user.decorator';
+import { Auth } from '../decorators/auth.decorator';
 // import { createCatSchema } from './cats.schema';
 
 interface FindOneV2 {
@@ -89,6 +91,13 @@ export class CatsController {
     return this.catsService.findAll();
   }
 
+  // http://localhost:3000/cats/find-all-v4
+  @Get('find-all-v4')
+  @Auth('admin')
+  async findAllV4(): Promise<Cat[]> {
+    return this.catsService.findAll();
+  }
+
   @Get('async')
   async findAllAsync(): Promise<Cat[]> {
     return this.catsService.findAllAsync();
@@ -123,9 +132,22 @@ export class CatsController {
     return output;
   }
 
+  // @Get('idv6')
+  // async findOneV6(
+  //   @User(new ValidationPipe({ validateCustomDecorators: true })) user: UserEntity,
+  // ): Promise<void> {
+  //   console.log(user);
+  // }
+
+  @Get('idv5')
+  // async findOne(@User() user: UserEntity) {
+  async findOneV5(@User('firstName') firstName: string): Promise<void> {
+    console.log(`Hello ${firstName}`);
+  }
+
   // http://localhost:3000/cats/idv4/123
   @Get('idv4/:id')
-  async findOneV4(@Param('id', new ParseIntPipe()) id) {
+  async findOneV4(@Param('id', new ParseIntPipe()) id): Promise<string> {
     return this.catsService.findOne(id);
   }
 
